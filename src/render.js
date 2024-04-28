@@ -31,7 +31,13 @@ const loadImage = (image) => {
 	});
 };
 
-await Promise.all([loadImage(redTile), loadImage(blueTile), loadImage(redKingTile), loadImage(blueKingTile), loadImage(moveIcon), loadImage(attackIcon)]);
+const loadImages = async (images) => {
+	await Promise.all(images.map((image) => loadImage(image)));
+};
+
+export const initImages = async () => {
+	await loadImages([redTile, blueTile, redKingTile, blueKingTile, moveIcon, attackIcon]);
+};
 
 const resetViewport = (ctx, state) => {
 	ctx.clearRect(0, 0, state.board[0].length * tileSize, state.board.length * tileSize);
