@@ -459,4 +459,21 @@ export const getSelectablePositions = (state) => {
 const getActions = (state) => {
 	const actions = [];
 
+	const positions = getSelectablePositions(state);
+	positions.forEach((position) => {
+		const attackPositions = getValidAttacksForTile(state, position);
+		attackPositions.forEach((attackPosition) => {
+			actions.push([{ ...position }, { ...attackPosition }]);
+		});
+	});
+	if (actions.length === 0) {
+		positions.forEach((position) => {
+			const movePositions = getValidMovesForTile(state, position);
+			movePositions.forEach((movePosition) => {
+				actions.push([{ ...position }, { ...movePosition }]);
+			});
+		});
+	}
+
+	return actions;
 };
