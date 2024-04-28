@@ -1,0 +1,47 @@
+*, *::before, *::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:root {
+	--colour-primary: hsl(296 57% 30%);
+	--colour-highlight: hsl(296 36% 42%);
+	--colour-shade: hsl(266 57% 30%);
+	--colour-contrast: hsl(116 57% 30%);
+}
+
+body {
+	font-family: "Courier New", Courier, monospace;
+}
+
+div {
+	min-height: 100dvh;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+}
+
+header {
+	text-align: center;
+	padding: 1em;
+	background-color: black;
+	color: white;
+}
+
+main {
+	display: grid;
+	place-items: center;
+}
+
+canvas {
+	border: 1px solid hsl(0 0% 0%);
+	background-color: hsl(0 0% 100%);
+	cursor: pointer;
+}
+
+footer {
+	text-align: right;
+	padding: 0.5em;
+	background-color: black;
+	color: white;
+}
