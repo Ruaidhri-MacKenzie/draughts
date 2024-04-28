@@ -284,23 +284,25 @@ const attack = (state, position) => {
 
 // State
 const resetGame = (state) => {
+	state.currentPlayer = 1;
+	state.selectedPosition = { column: null, row: null };
+	state.continuingAttack = { column: null, row: null };
+
 	const columns = state.board[0].length;
 	const rows = state.board.length;
 	for (let row = 0; row < rows; row++) {
 		for (let column = 0; column < columns; column++) {
-			if (isValidPosition({ column, row })) {
-				if (row < 3) state.board[row][column] = tileType.OTHER;
-				else if (row >= rows - 3) state.board[row][column] = tileType.SELF;
-				else state.board[row][column] = tileType.EMPTY;
+			const position = { column, row };
+			if (isValidPosition(position)) {
+				if (row < 3) setTile(state, position, tileType.OTHER);
+				else if (row >= rows - 3) setTile(state, position, tileType.SELF);
+				else setTileToEmpty(state, position);
 			}
 			else {
-				state.board[row][column] = tileType.EMPTY;
+				setTileToEmpty(state, position);
 			}
 		}
 	}
-	state.currentPlayer = 1;
-	state.selectedPosition = { column: null, row: null };
-	state.continuingAttack = { column: null, row: null };
 };
 
 export const createState = () => {
@@ -347,8 +349,7 @@ const scoreTheBoard = (state) => {
 	return { selfScore, otherScore };
 };
 
-const gameOver = (state) => {
-	const { selfScore, otherScore } = scoreTheBoard(state);
+const gameOver = (state, selfScore, otherScore) => {
 	if (selfScore === otherScore) {
 		console.log("Game over - Draw!");
 	}
@@ -365,17 +366,23 @@ const gameOver = (state) => {
 };
 
 const nextTurn = (state) => {
+	// Check if player has won
+	const { selfScore, otherScore } = scoreTheBoard(state);
+	if (otherScore === 0) {
+		gameOver(state, selfScore, otherScore);
+		return;
+	}
+
+	// Rotate the board and change which team is self
 	swapPlayers(state);
 	
 	if (!moveIsAvailable(state) && !attackIsAvailable(state)) {
 		swapPlayers(state);
 		if (!moveIsAvailable(state) && !attackIsAvailable(state)) {
-			gameOver();
-			return false;
+			// No valid actions available for either player
+			gameOver(state, selfScore, otherScore);
 		}
 	}
-
-	return true;
 };
 
 export const action = (state, position) => {
@@ -421,4 +428,35 @@ export const action = (state, position) => {
 		if (tileCanAttack(state, position)) setContinuingAttack(state, position);
 		else nextTurn(state);
 	}
+};
+
+export const getSelectablePositions = (state) => {
+	const positions = [];
+
+	if (isContinuingAttack(state)) {
+		positions.push({ ...state.continuingAttack });
+		return positions;
+	}
+	
+	if (attackIsAvailable(state)) {
+		for (let row = 0; row < state.board.length; row++) {
+			for (let column = 0; column < state.board[0].length; column++) {
+				if (tileCanAttack(state, { column, row })) positions.push({ column, row });
+			}
+		}	
+	}
+	else {
+		for (let row = 0; row < state.board.length; row++) {
+			for (let column = 0; column < state.board[0].length; column++) {
+				if (tileCanMove(state, { column, row })) positions.push({ column, row });
+			}
+		}
+	}
+
+	return positions;
+};
+
+const getActions = (state) => {
+	const actions = [];
+
 };

@@ -1,9 +1,10 @@
-import { isRedTurn, isBlueTurn, isValidPosition, isSelfTile, isOtherTile, isKingTile, hasSelectedPosition, getValidMovesForTile, getValidAttacksForTile } from "./draughts.js";
+import { isRedTurn, isBlueTurn, isValidPosition, isSelfTile, isOtherTile, isKingTile, hasSelectedPosition, getValidMovesForTile, getValidAttacksForTile, getSelectablePositions } from "./draughts.js";
 
 const tileSize = 64;
 const colour = {
 	GRID: "#333333",
 	SELECTED: "#00ff00",
+	VALID: "#ffff00",
 };
 
 const redTile = new Image();
@@ -58,13 +59,11 @@ const drawChequer = (ctx, position) => {
 const drawTile = (ctx, state, position) => {
 	if ((isRedTurn(state) && isSelfTile(state, position)) || (isBlueTurn(state) && isOtherTile(state, position))) {
 		// Red Tile
-		if (isKingTile(state, position)) ctx.drawImage(redKingTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
-		else ctx.drawImage(redTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
+		ctx.drawImage(isKingTile(state, position) ? redKingTile : redTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
 	}
 	else if ((isBlueTurn(state) && isSelfTile(state, position)) || (isRedTurn(state) && isOtherTile(state, position))) {
 		// Blue Tile
-		if (isKingTile(state, position)) ctx.drawImage(blueKingTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
-		else ctx.drawImage(blueTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
+		ctx.drawImage(isKingTile(state, position) ? blueKingTile : blueTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
 	}
 };
 
@@ -91,6 +90,15 @@ const drawValidActions = (ctx, state) => {
 	}
 };
 
+const drawSelectablePositions = (ctx, state) => {
+	const positions = getSelectablePositions(state);
+	ctx.strokeStyle = colour.VALID;
+	ctx.lineWidth = 3;
+	positions.forEach((position) => {
+		ctx.strokeRect(position.column * tileSize, position.row * tileSize, tileSize, tileSize);
+	});
+};
+
 export const draw = (canvas, state) => {
 	const ctx = canvas.getContext("2d");
 	const columns = state.board[0].length;
@@ -109,6 +117,9 @@ export const draw = (canvas, state) => {
 	if (hasSelectedPosition(state)) {
 		drawSelectedPosition(ctx, state);
 		drawValidActions(ctx, state);
+	}
+	else {
+		drawSelectablePositions(ctx, state);
 	}
 };
 
