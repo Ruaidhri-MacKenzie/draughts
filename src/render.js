@@ -13,20 +13,20 @@ const colour = {
 const redTile = new Image();
 redTile.src = "./img/tile-red.png";
 
-const redKingTile = new Image();
-redKingTile.src = "./img/tile-red-king.png";
-
 const blueTile = new Image();
 blueTile.src = "./img/tile-blue.png";
 
+const redKingTile = new Image();
+redKingTile.src = "./img/king-tile-red.png";
+
 const blueKingTile = new Image();
-blueKingTile.src = "./img/tile-blue-king.png";
+blueKingTile.src = "./img/king-tile-blue.png";
 
 const moveIcon = new Image();
-moveIcon.src = "./img/move-icon.png";
+moveIcon.src = "./img/icon-move.png";
 
 const attackIcon = new Image();
-attackIcon.src = "./img/attack-icon.png";
+attackIcon.src = "./img/icon-attack.png";
 
 const loadImage = (image) => {
 	return new Promise((resolve, reject) => {
