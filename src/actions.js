@@ -52,7 +52,7 @@ export const getSelectablePositions = (state) => {
 			for (let column = 0; column < state.board[0].length; column++) {
 				if (tileCanAttack(state, { column, row })) positions.push({ column, row });
 			}
-		}	
+		}
 	}
 	else {
 		for (let row = 0; row < state.board.length; row++) {
@@ -62,6 +62,30 @@ export const getSelectablePositions = (state) => {
 		}
 	}
 
+	return positions;
+};
+
+export const isAttackablePosition = (state, position) => {
+	if (!isOtherTile(state, position) || position.row === 0 || position.row === state.board.length || position.column === 0 || position.column === state.board[0].length) return false;
+
+	const { column, row } = position;
+	if (isEmptyTile(state, { column: column - 1, row: row - 1 }) && isSelfTile(state, { column: column + 1, row: row + 1 })) return true;
+	if (isEmptyTile(state, { column: column + 1, row: row - 1 }) && isSelfTile(state, { column: column - 1, row: row + 1 })) return true;
+	if (isEmptyTile(state, { column: column - 1, row: row + 1 }) && isSelfTile(state, { column: column + 1, row: row - 1 }) && isKingTile(state, { column: column + 1, row: row - 1 })) return true;
+	if (isEmptyTile(state, { column: column + 1, row: row + 1 }) && isSelfTile(state, { column: column - 1, row: row - 1 }) && isKingTile(state, { column: column - 1, row: row - 1 })) return true;
+	return false;
+};
+
+export const getAttackablePositions = (state) => {
+	const positions = [];
+
+	for (let row = 0; row < state.board.length; row++) {
+		for (let column = 0; column < state.board[0].length; column++) {
+			const position = { column, row };
+			if (isAttackablePosition(state, position)) positions.push(position);
+		}
+	}
+	
 	return positions;
 };
 

@@ -1,13 +1,11 @@
 import { isSelfTile, isOtherTile } from "./board.js";
 import { isValidPosition, isKingTile } from "./draughts.js";
-import { getValidMovesForTile, getValidAttacksForTile, getSelectablePositions } from "./actions.js";
+import { getValidMovesForTile, getValidAttacksForTile, getSelectablePositions, getAttackablePositions } from "./actions.js";
 import { isPlayerOneTurn, isPlayerTwoTurn, hasSelectedPosition } from "./play.js";
 
 const tileSize = 64;
 const colour = {
 	GRID: "#333333",
-	SELECTED: "#00ff00",
-	VALID: "#ffff00",
 };
 
 const redTile = new Image();
@@ -28,6 +26,15 @@ moveIcon.src = "./img/icon-move.png";
 const attackIcon = new Image();
 attackIcon.src = "./img/icon-attack.png";
 
+const selectableIcon = new Image();
+selectableIcon.src = "./img/icon-selectable.png";
+
+const selectedIcon = new Image();
+selectedIcon.src = "./img/icon-selected.png";
+
+const attackableIcon = new Image();
+attackableIcon.src = "./img/icon-attackable.png";
+
 const loadImages = async (images) => {
 	return Promise.all(images.map((image) => {
 		return new Promise((resolve, reject) => {
@@ -38,7 +45,7 @@ const loadImages = async (images) => {
 };
 
 export const initImages = async () => {
-	await loadImages([redTile, blueTile, redKingTile, blueKingTile, moveIcon, attackIcon]);
+	await loadImages([redTile, blueTile, redKingTile, blueKingTile, moveIcon, attackIcon, selectableIcon, selectedIcon, attackableIcon]);
 };
 
 const resetViewport = (ctx, state) => {
@@ -60,19 +67,18 @@ const drawChequer = (ctx, position) => {
 const drawTile = (ctx, state, position) => {
 	if ((isPlayerOneTurn(state) && isSelfTile(state, position)) || (isPlayerTwoTurn(state) && isOtherTile(state, position))) {
 		// Red Tile
-		ctx.drawImage(isKingTile(state, position) ? redKingTile : redTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
+		const image = isKingTile(state, position) ? redKingTile : redTile;
+		ctx.drawImage(image, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
 	}
 	else if ((isPlayerTwoTurn(state) && isSelfTile(state, position)) || (isPlayerOneTurn(state) && isOtherTile(state, position))) {
 		// Blue Tile
-		ctx.drawImage(isKingTile(state, position) ? blueKingTile : blueTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
+		const image = isKingTile(state, position) ? blueKingTile : blueTile;
+		ctx.drawImage(image, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
 	}
 };
 
 const drawSelectedPosition = (ctx, state) => {
-	// Draw selected position highlight
-	ctx.strokeStyle = colour.SELECTED;
-	ctx.lineWidth = 3;
-	ctx.strokeRect(state.selectedPosition.column * tileSize, state.selectedPosition.row * tileSize, tileSize, tileSize);
+	ctx.drawImage(selectedIcon, state.selectedPosition.column * tileSize, state.selectedPosition.row * tileSize, tileSize, tileSize);
 };
 
 const drawValidActions = (ctx, state) => {
@@ -93,10 +99,15 @@ const drawValidActions = (ctx, state) => {
 
 const drawSelectablePositions = (ctx, state) => {
 	const positions = getSelectablePositions(state);
-	ctx.strokeStyle = colour.VALID;
-	ctx.lineWidth = 3;
 	positions.forEach((position) => {
-		ctx.strokeRect(position.column * tileSize, position.row * tileSize, tileSize, tileSize);
+		ctx.drawImage(selectableIcon, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
+	});
+};
+
+const drawAttackablePositions = (ctx, state) => {
+	const positions = getAttackablePositions(state);
+	positions.forEach((position) => {
+		ctx.drawImage(attackableIcon, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
 	});
 };
 
@@ -118,6 +129,7 @@ export const draw = (canvas, state) => {
 	if (hasSelectedPosition(state)) {
 		drawSelectedPosition(ctx, state);
 		drawValidActions(ctx, state);
+		drawAttackablePositions(ctx, state);
 	}
 	else {
 		drawSelectablePositions(ctx, state);
