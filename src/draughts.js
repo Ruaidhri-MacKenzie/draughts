@@ -171,16 +171,7 @@ export const resetState = (state) => {
 
 export const updateState = (state, action) => {
 	// Action = [startPosition, endPosition]
-
-	const columns = 8;
-	const rows = 8;
-
-	// Create board
-	const board = Array.from(Array(rows), () => new Array(columns).fill(0));
-
-	// Rotate the board
-	board.map((row) => row.toReversed().map((tile) => tile * -1)).toReversed();
-
+	
 };
 
 export const scoreState = (state) => {

@@ -42,25 +42,9 @@ export const moveTile = (state, startPosition, endPosition) => {
 };
 
 export const createBoard = (columns, rows) => {
-	const board = [];
-
-	for (let row = 0; row < rows; row++) {
-		board[row] = [];
-		for (let column = 0; column < columns; column++) {
-			board[row][column] = tiles.EMPTY;
-		}
-	}
-
-	return board;
+	return Array.from(Array(rows), () => new Array(columns).fill(tiles.EMPTY));
 };
 
 export const rotateBoard = (state) => {
-	for (let row = 0; row < state.board.length; row++) {
-		state.board[row].reverse();
-		for (let column = 0; column < state.board[0].length; column++) {
-			// Set the current player's pieces to positive, other to negative
-			state.board[row][column] *= -1;
-		}
-	}
-	state.board.reverse();
+	state.board = state.board.map((row) => row.toReversed().map((tile) => tile * -1)).toReversed();
 };
