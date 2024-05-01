@@ -28,15 +28,13 @@ moveIcon.src = "./img/icon-move.png";
 const attackIcon = new Image();
 attackIcon.src = "./img/icon-attack.png";
 
-const loadImage = (image) => {
-	return new Promise((resolve, reject) => {
-		image.onload = () => resolve(image);
-		image.onerror = reject;
-	});
-};
-
 const loadImages = async (images) => {
-	await Promise.all(images.map((image) => loadImage(image)));
+	return Promise.all(images.map((image) => {
+		return new Promise((resolve, reject) => {
+			image.onload = () => resolve(image);
+			image.onerror = reject;
+		});
+	}));
 };
 
 export const initImages = async () => {
