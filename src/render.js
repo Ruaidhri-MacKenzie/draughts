@@ -1,4 +1,7 @@
-import { isRedTurn, isBlueTurn, isValidPosition, isSelfTile, isOtherTile, isKingTile, hasSelectedPosition, getValidMovesForTile, getValidAttacksForTile, getSelectablePositions } from "./draughts.js";
+import { isSelfTile, isOtherTile } from "./board.js";
+import { isValidPosition, isKingTile } from "./draughts.js";
+import { getValidMovesForTile, getValidAttacksForTile, getSelectablePositions } from "./actions.js";
+import { isRedTurn, isBlueTurn, hasSelectedPosition } from "./play.js";
 
 const tileSize = 64;
 const colour = {
