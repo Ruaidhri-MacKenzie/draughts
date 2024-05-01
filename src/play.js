@@ -1,16 +1,16 @@
 import { getTile, rotateBoard } from "./board.js";
 import { attackIsAvailable, moveIsAvailable, resetState } from "./draughts.js";
 
-export const isRedTurn = (state) => {
+export const isPlayerOneTurn = (state) => {
 	return state.currentPlayer === 1;
 };
 
-export const isBlueTurn = (state) => {
+export const isPlayerTwoTurn = (state) => {
 	return state.currentPlayer === -1;
 };
 
 export const swapPlayers = (state) => {
-	// Switch between Red and Blue players
+	// Switch between Player One and Player Two
 	state.currentPlayer *= -1;
 };
 
@@ -54,13 +54,13 @@ export const gameOver = (state, selfScore, otherScore) => {
 	if (selfScore === otherScore) {
 		console.log("Game over - Draw!");
 	}
-	else if ((isRedTurn(state) && selfScore > otherScore) || (isBlueTurn(state) && selfScore < otherScore)) {
-		console.log("Game over - Red wins!");
-		state.redWins += 1;
+	else if ((isPlayerOneTurn(state) && selfScore > otherScore) || (isPlayerTwoTurn(state) && selfScore < otherScore)) {
+		console.log("Game over - Player One wins!");
+		state.playerOneWins += 1;
 	}
-	else if ((isBlueTurn(state) && selfScore > otherScore) || (isRedTurn(state) && selfScore < otherScore)) {
-		console.log("Game over - Blue wins!");
-		state.blueWins += 1;
+	else if ((isPlayerTwoTurn(state) && selfScore > otherScore) || (isPlayerOneTurn(state) && selfScore < otherScore)) {
+		console.log("Game over - Player Two wins!");
+		state.playerTwoWins += 1;
 	}
 	resetState(state);
 };

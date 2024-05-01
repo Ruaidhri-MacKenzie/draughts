@@ -153,8 +153,8 @@ export const resetContinuingAttack = (state) => {
 // Game State
 export const createState = () => {
 	return {
-		redWins: 0,
-		blueWins: 0,
+		playerOneWins: 0,
+		playerTwoWins: 0,
 		currentPlayer: 1,
 		selectedPosition: { column: null, row: null },
 		board: createDraughtsBoard(),		// Create representation of the game board using a 2d array

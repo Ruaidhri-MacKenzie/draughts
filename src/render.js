@@ -1,7 +1,7 @@
 import { isSelfTile, isOtherTile } from "./board.js";
 import { isValidPosition, isKingTile } from "./draughts.js";
 import { getValidMovesForTile, getValidAttacksForTile, getSelectablePositions } from "./actions.js";
-import { isRedTurn, isBlueTurn, hasSelectedPosition } from "./play.js";
+import { isPlayerOneTurn, isPlayerTwoTurn, hasSelectedPosition } from "./play.js";
 
 const tileSize = 64;
 const colour = {
@@ -58,11 +58,11 @@ const drawChequer = (ctx, position) => {
 };
 
 const drawTile = (ctx, state, position) => {
-	if ((isRedTurn(state) && isSelfTile(state, position)) || (isBlueTurn(state) && isOtherTile(state, position))) {
+	if ((isPlayerOneTurn(state) && isSelfTile(state, position)) || (isPlayerTwoTurn(state) && isOtherTile(state, position))) {
 		// Red Tile
 		ctx.drawImage(isKingTile(state, position) ? redKingTile : redTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
 	}
-	else if ((isBlueTurn(state) && isSelfTile(state, position)) || (isRedTurn(state) && isOtherTile(state, position))) {
+	else if ((isPlayerTwoTurn(state) && isSelfTile(state, position)) || (isPlayerOneTurn(state) && isOtherTile(state, position))) {
 		// Blue Tile
 		ctx.drawImage(isKingTile(state, position) ? blueKingTile : blueTile, position.column * tileSize, position.row * tileSize, tileSize, tileSize);
 	}
