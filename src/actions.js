@@ -1,5 +1,4 @@
-import { isEmptyTile, isSelfTile, isOtherTile, setTileToEmpty, moveTile } from "./board.js";
-import { getDefendingPosition, isKingTile, isKingableTile, upgradeTileToKing, tileCanAttack, tileCanMove, attackIsAvailable, isContinuingAttack, setContinuingAttack } from "./draughts.js";
+import { isEmptyTile, isSelfTile, isOtherTile, setTileToEmpty, moveTile, getDefendingPosition, isKingTile, isKingableTile, upgradeTileToKing, tileCanAttack, tileCanMove, attackIsAvailable, isContinuingAttack, setContinuingAttack } from "./draughts.js";
 
 export const isValidMove = (state, startPosition, endPosition) => {
 	// Check if tile is available (empty)
@@ -66,7 +65,7 @@ export const getSelectablePositions = (state) => {
 };
 
 export const isAttackablePosition = (state, position) => {
-	if (!isOtherTile(state, position) || position.row === 0 || position.row === state.board.length || position.column === 0 || position.column === state.board[0].length) return false;
+	if (!isOtherTile(state, position) || position.row === 0 || position.row === state.board.length - 1 || position.column === 0 || position.column === state.board[0].length - 1) return false;
 
 	const { column, row } = position;
 	if (isEmptyTile(state, { column: column - 1, row: row - 1 }) && isSelfTile(state, { column: column + 1, row: row + 1 })) return true;

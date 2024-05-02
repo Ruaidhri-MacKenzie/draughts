@@ -1,4 +1,4 @@
-import { getTile, isEmptyTile, isSelfTile, isOtherTile, setTile, setTileToEmpty, setTileToSelf, setTileToOther, createBoard } from "./board.js";
+import { getTile, setTile, createBoard } from "./board.js";
 
 const tiles = {
 	EMPTY: 0,
@@ -11,6 +11,35 @@ const tiles = {
 // Draughts Board
 export const isValidPosition = (position) => {
 	return (position.column % 2 === 0 && position.row % 2 === 1) || (position.column % 2 === 1 && position.row % 2 === 0);
+};
+
+export const isEmptyTile = (state, position) => {
+	return getTile(state, position) === tiles.EMPTY;
+};
+
+export const isSelfTile = (state, position) => {
+	return getTile(state, position) > 0;
+};
+
+export const isOtherTile = (state, position) => {
+	return getTile(state, position) < 0;
+};
+
+export const setTileToEmpty = (state, position) => {
+	setTile(state, position, tiles.EMPTY);
+};
+
+export const setTileToSelf = (state, position) => {
+	setTile(state, position, tiles.SELF_TILE);
+};
+
+export const setTileToOther = (state, position) => {
+	setTile(state, position, tiles.OTHER_TILE);
+};
+
+export const moveTile = (state, startPosition, endPosition) => {
+	setTile(state, endPosition, getTile(state, startPosition));
+	setTileToEmpty(state, startPosition);
 };
 
 export const getDefendingPosition = (startPosition, endPosition) => {
@@ -80,6 +109,7 @@ export const createDraughtsBoard = () => {
 			if (isValidPosition({ column, row })) {
 				if (row < 3) board[row][column] = tiles.OTHER_TILE;
 				else if (row >= rows - 3) board[row][column] = tiles.SELF_TILE;
+				else board[row][column] = tiles.EMPTY;
 			}
 		}
 	}

@@ -1,5 +1,4 @@
-import { isSelfTile, isOtherTile } from "./board.js";
-import { isValidPosition, isKingTile } from "./draughts.js";
+import { isValidPosition, isSelfTile, isOtherTile, isKingTile } from "./draughts.js";
 import { getValidMovesForTile, getValidAttacksForTile, getSelectablePositions, getAttackablePositions } from "./actions.js";
 import { isPlayerOneTurn, isPlayerTwoTurn, hasSelectedPosition } from "./play.js";
 

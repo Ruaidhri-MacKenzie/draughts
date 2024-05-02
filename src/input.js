@@ -1,6 +1,5 @@
-import { isSelfTile } from "./board.js";
 import { setSelectedPosition, resetSelectedPosition, hasSelectedPosition, toggleSelectedPosition, nextTurn } from "./play.js";
-import { isValidPosition, tileIsSelectable, isContinuingAttack, resetContinuingAttack } from "./draughts.js";
+import { isValidPosition, isSelfTile, tileIsSelectable, isContinuingAttack, resetContinuingAttack } from "./draughts.js";
 import { isValidMove, isValidAttack, actionMove, actionAttack } from "./actions.js";
 import { draw, getPositionFromClick } from "./render.js";
 
